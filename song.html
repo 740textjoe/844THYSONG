@@ -1,11 +1,12 @@
 <!doctype html>
+<!-- 844.THY.SONG player v0.13: autoplay attempt + giant play fallback + prefixed metadata -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#11111a">
-  <title>844 THY SONG</title>
+  <title>844.THY.SONG</title>
   <style>
     :root {
       color-scheme: dark;
@@ -52,15 +53,45 @@
     }
 
     .meta {
-      margin: 12px 0 26px;
-      font-size: 1.05rem;
-      color: rgba(247,247,251,0.72);
+      margin: 14px 0 26px;
+      display: grid;
+      gap: 5px;
+      font-size: 1rem;
+      color: rgba(247,247,251,0.76);
+    }
+
+    .meta-row {
+      line-height: 1.35;
+    }
+
+    .hero-play {
+      appearance: none;
+      width: 100%;
+      min-height: 78px;
+      margin: 4px 0 16px;
+      border: 0;
+      border-radius: 18px;
+      padding: 18px 20px;
+      font: inherit;
+      font-size: clamp(1.05rem, 4vw, 1.35rem);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      background: #f7f7fb;
+      color: #11111a;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.28);
+    }
+
+    .hero-play:disabled {
+      cursor: wait;
+      opacity: 0.65;
     }
 
     audio {
       display: block;
       width: 100%;
-      margin: 10px 0 24px;
+      margin: 0 0 24px;
     }
 
     .buttons {
@@ -112,7 +143,7 @@
 </head>
 <body>
   <main>
-    <p class="brand">844 THY SONG</p>
+    <p class="brand">844.THY.SONG</p>
 
     <section id="loading">
       <h1>Your song</h1>
@@ -121,16 +152,20 @@
 
     <section id="song" hidden>
       <h1 id="title">Your Scripture Song</h1>
-      <p class="meta" id="meta"></p>
+      <div class="meta" id="meta"></div>
 
-      <audio id="audio" controls preload="metadata"></audio>
+      <button class="hero-play" id="heroPlay" type="button" disabled>
+        ▶ PRESS HERE TO PLAY YOUR SONG
+      </button>
+
+      <audio id="audio" controls preload="metadata" playsinline></audio>
 
       <div class="buttons">
         <a class="button" id="download" href="#">Download MP3</a>
         <button class="button secondary" id="share" type="button">Share Song</button>
       </div>
 
-      <p class="footer">Created with 844 THY SONG</p>
+      <p class="footer">Created with 844.THY.SONG</p>
     </section>
   </main>
 
@@ -144,6 +179,7 @@
     const title = document.getElementById("title");
     const meta = document.getElementById("meta");
     const audio = document.getElementById("audio");
+    const heroPlay = document.getElementById("heroPlay");
     const download = document.getElementById("download");
     const share = document.getElementById("share");
 
@@ -154,6 +190,52 @@
         : "";
       const fromQuery = new URLSearchParams(window.location.search).get("code") || "";
       return (fromPath || fromQuery).trim().toUpperCase();
+    }
+
+    function scriptureDisplayInfo(translation) {
+      const code = String(translation || "").trim().toUpperCase();
+
+      if (code === "BSB") {
+        return { scripture: "Bible", version: "Berean Standard Bible (BSB)" };
+      }
+      if (code === "KJV") {
+        return { scripture: "Bible", version: "King James Version (KJV)" };
+      }
+      if (code === "BOM1920") {
+        return { scripture: "Book of Mormon", version: "1920 LDS Edition" };
+      }
+      return { scripture: "Scripture", version: code || "Unknown version" };
+    }
+
+    function setMetaRows(rows) {
+      meta.replaceChildren();
+      for (const [label, value] of rows) {
+        const row = document.createElement("div");
+        row.className = "meta-row";
+        row.textContent = `${label}: ${value}`;
+        meta.appendChild(row);
+      }
+    }
+
+    function updatePlayButton() {
+      if (audio.paused || audio.ended) {
+        heroPlay.textContent = "▶ PRESS HERE TO PLAY YOUR SONG";
+        heroPlay.setAttribute("aria-label", "Play your song");
+      } else {
+        heroPlay.textContent = "❚❚ PAUSE";
+        heroPlay.setAttribute("aria-label", "Pause your song");
+      }
+    }
+
+    async function attemptAutoplay() {
+      try {
+        await audio.play();
+      } catch (error) {
+        // Audible autoplay is commonly blocked on mobile. The large button remains the fallback.
+        console.info("Autoplay was blocked; waiting for user tap.", error?.name || error);
+      } finally {
+        updatePlayButton();
+      }
     }
 
     async function loadSong() {
@@ -180,26 +262,53 @@
         const passage = s.passage || "Your Scripture Song";
         const style = s.style || "Song";
         const translation = s.translation || "BSB";
+        const display = scriptureDisplayInfo(translation);
 
-        document.title = `${passage} | 844 THY SONG`;
+        document.title = `${passage} | 844.THY.SONG`;
         title.textContent = passage;
-        meta.textContent = `${style} • ${translation}`;
+        setMetaRows([
+          ["Scripture", display.scripture],
+          ["Version", display.version],
+          ["Sound", style],
+        ]);
         audio.src = s.play_url;
+        audio.load();
         download.href = s.download_url;
         download.setAttribute("download", "");
 
+        heroPlay.disabled = false;
         loading.hidden = true;
         songSection.hidden = false;
+
+        await attemptAutoplay();
       } catch (error) {
         console.error(error);
         status.textContent = error?.message || "Could not load this song right now.";
       }
     }
 
+    heroPlay.addEventListener("click", async () => {
+      try {
+        if (audio.paused || audio.ended) {
+          await audio.play();
+        } else {
+          audio.pause();
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        updatePlayButton();
+      }
+    });
+
+    audio.addEventListener("play", updatePlayButton);
+    audio.addEventListener("pause", updatePlayButton);
+    audio.addEventListener("ended", updatePlayButton);
+
     share.addEventListener("click", async () => {
       const shareData = {
         title: document.title,
-        text: `${title.textContent} • 844 THY SONG`,
+        text: `${title.textContent} • 844.THY.SONG`,
         url: window.location.href,
       };
 
@@ -224,4 +333,3 @@
   </script>
 </body>
 </html>
-
