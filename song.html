@@ -1,1 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#11111a">
+  <title>844 THY SONG</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top, rgba(108, 92, 231, 0.22), transparent 40%),
+        linear-gradient(180deg, #11111a 0%, #08080d 100%);
+      color: #f7f7fb;
+    }
+
+    main {
+      width: min(620px, 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 28px;
+      background: rgba(18,18,28,0.88);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.38);
+    }
+
+    .brand {
+      margin: 0 0 28px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+      opacity: 0.68;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 9vw, 3.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .meta {
+      margin: 12px 0 26px;
+      font-size: 1.05rem;
+      color: rgba(247,247,251,0.72);
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      margin: 10px 0 24px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .button {
+      appearance: none;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font: inherit;
+      font-weight: 750;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      background: #f7f7fb;
+      color: #11111a;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: #f7f7fb;
+    }
+
+    #status {
+      margin: 8px 0 0;
+      color: rgba(247,247,251,0.72);
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin: 28px 0 0;
+      font-size: 0.84rem;
+      color: rgba(247,247,251,0.46);
+      text-align: center;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 520px) {
+      main { padding: 22px; border-radius: 20px; }
+      .buttons { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="brand">844 THY SONG</p>
+
+    <section id="loading">
+      <h1>Your song</h1>
+      <p id="status">Loading your Scripture song…</p>
+    </section>
+
+    <section id="song" hidden>
+      <h1 id="title">Your Scripture Song</h1>
+      <p class="meta" id="meta"></p>
+
+      <audio id="audio" controls preload="metadata"></audio>
+
+      <div class="buttons">
+        <a class="button" id="download" href="#">Download MP3</a>
+        <button class="button secondary" id="share" type="button">Share Song</button>
+      </div>
+
+      <p class="footer">Created with 844 THY SONG</p>
+    </section>
+  </main>
+
+  <script>
+    const SONG_INFO_ENDPOINT =
+      "https://frkkfdshtqxbkzyrhdcr.supabase.co/functions/v1/thysong-song-info";
+
+    const loading = document.getElementById("loading");
+    const songSection = document.getElementById("song");
+    const status = document.getElementById("status");
+    const title = document.getElementById("title");
+    const meta = document.getElementById("meta");
+    const audio = document.getElementById("audio");
+    const download = document.getElementById("download");
+    const share = document.getElementById("share");
+
+    function getShareCode() {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const fromPath = parts.length >= 2 && parts[0].toLowerCase() === "s"
+        ? parts[1]
+        : "";
+      const fromQuery = new URLSearchParams(window.location.search).get("code") || "";
+      return (fromPath || fromQuery).trim().toUpperCase();
+    }
+
+    async function loadSong() {
+      const code = getShareCode();
+
+      if (!code) {
+        status.textContent = "This song link is incomplete.";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${SONG_INFO_ENDPOINT}?code=${encodeURIComponent(code)}`,
+          { cache: "no-store" }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data?.ok || !data?.song) {
+          throw new Error(data?.error || "Song not found.");
+        }
+
+        const s = data.song;
+        const passage = s.passage || "Your Scripture Song";
+        const style = s.style || "Song";
+        const translation = s.translation || "BSB";
+
+        document.title = `${passage} | 844 THY SONG`;
+        title.textContent = passage;
+        meta.textContent = `${style} • ${translation}`;
+        audio.src = s.play_url;
+        download.href = s.download_url;
+        download.setAttribute("download", "");
+
+        loading.hidden = true;
+        songSection.hidden = false;
+      } catch (error) {
+        console.error(error);
+        status.textContent = error?.message || "Could not load this song right now.";
+      }
+    }
+
+    share.addEventListener("click", async () => {
+      const shareData = {
+        title: document.title,
+        text: `${title.textContent} • 844 THY SONG`,
+        url: window.location.href,
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+
+        await navigator.clipboard.writeText(window.location.href);
+        const original = share.textContent;
+        share.textContent = "Link Copied";
+        setTimeout(() => { share.textContent = original; }, 1800);
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          console.error(error);
+        }
+      }
+    });
+
+    loadSong();
+  </script>
+</body>
+</html>
 
