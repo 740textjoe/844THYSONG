@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 844.THY.SONG player v0.13: autoplay attempt + giant play fallback + prefixed metadata -->
+<!-- 844.THY.SONG player v0.14: arranged lyrics + actual translation display -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -120,6 +120,40 @@
       color: #f7f7fb;
     }
 
+    .lyrics {
+      margin: 18px 0 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.035);
+      overflow: hidden;
+    }
+
+    .lyrics summary {
+      padding: 15px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      user-select: none;
+    }
+
+    .lyrics summary::marker {
+      color: rgba(247,247,251,0.72);
+    }
+
+    .lyrics[open] summary {
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .lyrics-text {
+      margin: 0;
+      padding: 18px 16px 20px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font: inherit;
+      font-size: 0.98rem;
+      line-height: 1.62;
+      color: rgba(247,247,251,0.88);
+    }
+
     #status {
       margin: 8px 0 0;
       color: rgba(247,247,251,0.72);
@@ -165,6 +199,11 @@
         <button class="button secondary" id="share" type="button">Share Song</button>
       </div>
 
+      <details class="lyrics" id="lyricsSection" hidden>
+        <summary>View lyrics</summary>
+        <pre class="lyrics-text" id="lyricsText"></pre>
+      </details>
+
       <p class="footer">Created with 844.THY.SONG</p>
     </section>
   </main>
@@ -182,6 +221,8 @@
     const heroPlay = document.getElementById("heroPlay");
     const download = document.getElementById("download");
     const share = document.getElementById("share");
+    const lyricsSection = document.getElementById("lyricsSection");
+    const lyricsText = document.getElementById("lyricsText");
 
     function getShareCode() {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -195,6 +236,9 @@
     function scriptureDisplayInfo(translation) {
       const code = String(translation || "").trim().toUpperCase();
 
+      if (code === "OEB") {
+        return { scripture: "Bible", version: "Open English Bible (OEB)" };
+      }
       if (code === "BSB") {
         return { scripture: "Bible", version: "Berean Standard Bible (BSB)" };
       }
@@ -215,6 +259,21 @@
         row.textContent = `${label}: ${value}`;
         meta.appendChild(row);
       }
+    }
+
+    function setLyrics(arrangedLyrics) {
+      const lyrics = String(arrangedLyrics || "").trim();
+
+      if (!lyrics) {
+        lyricsText.textContent = "";
+        lyricsSection.hidden = true;
+        return;
+      }
+
+      // textContent intentionally keeps the stored lyric sheet as plain text,
+      // preserving section labels and line breaks without interpreting HTML.
+      lyricsText.textContent = lyrics;
+      lyricsSection.hidden = false;
     }
 
     function updatePlayButton() {
@@ -271,6 +330,8 @@
           ["Version", display.version],
           ["Sound", style],
         ]);
+        setLyrics(s.arranged_lyrics);
+
         audio.src = s.play_url;
         audio.load();
         download.href = s.download_url;
