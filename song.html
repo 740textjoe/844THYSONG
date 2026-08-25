@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 844.THY.SONG player v0.15: KISS player + always-open lyrics + sticky playback -->
+<!-- 844.THY.SONG player v0.16: v0.15 KISS player + screenshot CTA + trademark/copyright polish -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -49,7 +49,7 @@
     }
 
     .brand {
-      margin: 0 0 24px;
+      margin: 0;
       color: var(--gold);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 0.88rem;
@@ -57,6 +57,27 @@
       letter-spacing: 0.20em;
       text-align: center;
       text-transform: uppercase;
+    }
+
+    .brand .tm {
+      margin-left: 0.12em;
+      font-size: 0.64em;
+      vertical-align: super;
+      letter-spacing: 0;
+    }
+
+    .brand-cta {
+      margin: 8px 0 24px;
+      color: rgba(248,245,236,0.68);
+      font-size: 0.82rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .brand-cta .number {
+      color: rgba(232,189,97,0.92);
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     h1 {
@@ -151,13 +172,13 @@
     .footer {
       margin: 24px 0 0;
       color: rgba(248,245,236,0.50);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       line-height: 1.55;
       text-align: center;
     }
 
-    .footer .number {
-      color: rgba(232,189,97,0.78);
+    .footer .legal-brand {
+      color: rgba(232,189,97,0.72);
     }
 
     #status {
@@ -277,13 +298,19 @@
 <body>
   <main>
     <section class="card" id="loading">
-      <p class="brand">844.THY.SONG</p>
+      <p class="brand">844.THY.SONG<span class="tm">™</span></p>
+      <p class="brand-cta">
+        Create your own Scripture song • Text <span class="number">844-849-7664</span>
+      </p>
       <h1>Your song</h1>
       <p id="status">Loading your Scripture song…</p>
     </section>
 
     <section class="card" id="song" hidden>
-      <p class="brand">844.THY.SONG</p>
+      <p class="brand">844.THY.SONG<span class="tm">™</span></p>
+      <p class="brand-cta">
+        Create your own Scripture song • Text <span class="number">844-849-7664</span>
+      </p>
 
       <h1 id="title">Your Scripture Song</h1>
       <div class="meta" id="meta"></div>
@@ -298,8 +325,8 @@
       </div>
 
       <p class="footer">
-        Created with 844.THY.SONG<br>
-        <span class="number">Text 844-THY-SONG (844-849-7664)</span>
+        <span class="legal-brand">844.THY.SONG™</span><br>
+        © 2026 740-TEXT-JOE, LLC. All rights reserved.
       </p>
     </section>
   </main>
