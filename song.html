@@ -1,16 +1,25 @@
 <!doctype html>
-<!-- 844.THY.SONG player v0.14: arranged lyrics + actual translation display -->
+<!-- 844.THY.SONG player v0.15: KISS player + always-open lyrics + sticky playback -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="theme-color" content="#11111a">
+  <meta name="theme-color" content="#071525">
   <title>844.THY.SONG</title>
   <style>
     :root {
       color-scheme: dark;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --navy: #071525;
+      --navy-2: #0b1d31;
+      --panel: #0d2137;
+      --cream: #fff3d2;
+      --gold: #e8bd61;
+      --gold-soft: #c99b45;
+      --text: #f8f5ec;
+      --muted: rgba(248,245,236,0.70);
+      --line: rgba(232,189,97,0.28);
     }
 
     * { box-sizing: border-box; }
@@ -18,195 +27,313 @@
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      padding: 24px 16px 190px;
       background:
-        radial-gradient(circle at top, rgba(108, 92, 231, 0.22), transparent 40%),
-        linear-gradient(180deg, #11111a 0%, #08080d 100%);
-      color: #f7f7fb;
+        radial-gradient(circle at top, rgba(33, 78, 122, 0.30), transparent 42%),
+        linear-gradient(180deg, var(--navy-2) 0%, #030a12 100%);
+      color: var(--text);
     }
 
     main {
       width: min(620px, 100%);
-      border: 1px solid rgba(255,255,255,0.12);
+      margin: 0 auto;
+    }
+
+    .card {
+      border: 1px solid rgba(255,255,255,0.10);
       border-radius: 24px;
-      padding: 28px;
-      background: rgba(18,18,28,0.88);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.38);
+      padding: 26px;
+      background: rgba(7, 21, 37, 0.84);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.34);
+      backdrop-filter: blur(12px);
     }
 
     .brand {
-      margin: 0 0 28px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.19em;
+      margin: 0 0 24px;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.20em;
+      text-align: center;
       text-transform: uppercase;
-      opacity: 0.68;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2rem, 9vw, 3.5rem);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 11vw, 4.3rem);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      text-align: center;
     }
 
     .meta {
-      margin: 14px 0 26px;
+      margin: 20px 0 26px;
       display: grid;
-      gap: 5px;
-      font-size: 1rem;
-      color: rgba(247,247,251,0.76);
-    }
-
-    .meta-row {
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.98rem;
       line-height: 1.35;
+      text-align: center;
     }
 
-    .hero-play {
-      appearance: none;
-      width: 100%;
-      min-height: 78px;
-      margin: 4px 0 16px;
-      border: 0;
+    .meta strong {
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .lyrics-card {
+      margin-top: 10px;
+      border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 18px 20px;
-      font: inherit;
-      font-size: clamp(1.05rem, 4vw, 1.35rem);
-      font-weight: 900;
-      line-height: 1.2;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      background: #f7f7fb;
-      color: #11111a;
-      box-shadow: 0 10px 32px rgba(0,0,0,0.28);
+      padding: 20px 18px 22px;
+      background: rgba(13, 33, 55, 0.74);
     }
 
-    .hero-play:disabled {
-      cursor: wait;
-      opacity: 0.65;
+    .lyrics-title {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.45rem;
+      font-weight: 600;
     }
 
-    audio {
-      display: block;
-      width: 100%;
-      margin: 0 0 24px;
+    .lyrics-text {
+      font-size: 1rem;
+      line-height: 1.64;
+      color: rgba(248,245,236,0.93);
+      overflow-wrap: anywhere;
     }
 
-    .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .lyric-heading {
+      margin-top: 22px;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .lyric-heading:first-child {
+      margin-top: 0;
+    }
+
+    .lyric-line {
+      min-height: 1.64em;
+    }
+
+    .lyric-spacer {
+      height: 0.72em;
+    }
+
+    .download-row {
+      margin-top: 16px;
     }
 
     .button {
       appearance: none;
+      display: block;
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(232,189,97,0.60);
       border-radius: 14px;
       padding: 14px 16px;
+      color: var(--gold);
+      background: transparent;
       font: inherit;
       font-weight: 750;
       text-align: center;
       text-decoration: none;
       cursor: pointer;
-      background: #f7f7fb;
-      color: #11111a;
     }
 
-    .button.secondary {
-      background: transparent;
-      color: #f7f7fb;
+    .footer {
+      margin: 24px 0 0;
+      color: rgba(248,245,236,0.50);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      text-align: center;
     }
 
-    .lyrics {
-      margin: 18px 0 0;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.035);
-      overflow: hidden;
-    }
-
-    .lyrics summary {
-      padding: 15px 16px;
-      cursor: pointer;
-      font-weight: 800;
-      user-select: none;
-    }
-
-    .lyrics summary::marker {
-      color: rgba(247,247,251,0.72);
-    }
-
-    .lyrics[open] summary {
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .lyrics-text {
-      margin: 0;
-      padding: 18px 16px 20px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      font: inherit;
-      font-size: 0.98rem;
-      line-height: 1.62;
-      color: rgba(247,247,251,0.88);
+    .footer .number {
+      color: rgba(232,189,97,0.78);
     }
 
     #status {
       margin: 8px 0 0;
-      color: rgba(247,247,251,0.72);
+      color: var(--muted);
       line-height: 1.5;
+      text-align: center;
     }
 
-    .footer {
-      margin: 28px 0 0;
-      font-size: 0.84rem;
-      color: rgba(247,247,251,0.46);
-      text-align: center;
+    .player-dock {
+      position: fixed;
+      z-index: 10;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      width: min(620px, calc(100% - 24px));
+      border: 1px solid rgba(232,189,97,0.62);
+      border-radius: 20px;
+      padding: 15px 18px 13px;
+      background: linear-gradient(180deg, #fff1c9 0%, #efd18b 100%);
+      color: #071525;
+      box-shadow: 0 18px 55px rgba(0,0,0,0.42);
+    }
+
+    .play-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .play-button {
+      appearance: none;
+      flex: 0 0 auto;
+      width: 54px;
+      height: 54px;
+      border: 0;
+      border-radius: 50%;
+      background: #071525;
+      color: var(--cream);
+      font: inherit;
+      font-size: 1.35rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .play-button:disabled {
+      cursor: wait;
+      opacity: 0.62;
+    }
+
+    .play-label {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #071525;
+      font: inherit;
+      font-size: clamp(1.15rem, 5vw, 1.55rem);
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .play-label:disabled {
+      cursor: wait;
+      opacity: 0.62;
+    }
+
+    .progress-wrap {
+      margin-top: 11px;
+    }
+
+    .progress {
+      width: 100%;
+      accent-color: #9b7027;
+      cursor: pointer;
+    }
+
+    .progress:disabled {
+      cursor: wait;
+      opacity: 0.55;
+    }
+
+    .times {
+      margin-top: 2px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(7,21,37,0.78);
+      font-size: 0.82rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    audio {
+      display: none;
     }
 
     [hidden] { display: none !important; }
 
     @media (max-width: 520px) {
-      main { padding: 22px; border-radius: 20px; }
-      .buttons { grid-template-columns: 1fr; }
+      body {
+        padding: 14px 10px 182px;
+      }
+
+      .card {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+
+      .player-dock {
+        bottom: 8px;
+        width: calc(100% - 16px);
+        border-radius: 18px;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <p class="brand">844.THY.SONG</p>
-
-    <section id="loading">
+    <section class="card" id="loading">
+      <p class="brand">844.THY.SONG</p>
       <h1>Your song</h1>
       <p id="status">Loading your Scripture song…</p>
     </section>
 
-    <section id="song" hidden>
+    <section class="card" id="song" hidden>
+      <p class="brand">844.THY.SONG</p>
+
       <h1 id="title">Your Scripture Song</h1>
       <div class="meta" id="meta"></div>
 
-      <button class="hero-play" id="heroPlay" type="button" disabled>
-        ▶ PRESS HERE TO PLAY YOUR SONG
-      </button>
+      <section class="lyrics-card" aria-labelledby="lyricsHeading">
+        <h2 class="lyrics-title" id="lyricsHeading">Lyrics</h2>
+        <div class="lyrics-text" id="lyricsText"></div>
+      </section>
 
-      <audio id="audio" controls preload="metadata" playsinline></audio>
-
-      <div class="buttons">
+      <div class="download-row">
         <a class="button" id="download" href="#">Download MP3</a>
-        <button class="button secondary" id="share" type="button">Share Song</button>
       </div>
 
-      <details class="lyrics" id="lyricsSection" hidden>
-        <summary>View lyrics</summary>
-        <pre class="lyrics-text" id="lyricsText"></pre>
-      </details>
-
-      <p class="footer">Created with 844.THY.SONG</p>
+      <p class="footer">
+        Created with 844.THY.SONG<br>
+        <span class="number">Text 844-THY-SONG (844-849-7664)</span>
+      </p>
     </section>
   </main>
+
+  <audio id="audio" preload="metadata" playsinline></audio>
+
+  <section class="player-dock" id="playerDock" hidden aria-label="Song player">
+    <div class="play-row">
+      <button class="play-button" id="heroPlay" type="button" disabled aria-label="Play your song">
+        ▶
+      </button>
+      <button class="play-label" id="heroLabel" type="button" disabled>
+        PLAY SONG
+      </button>
+    </div>
+
+    <div class="progress-wrap">
+      <input
+        class="progress"
+        id="progress"
+        type="range"
+        min="0"
+        max="1000"
+        value="0"
+        step="1"
+        disabled
+        aria-label="Song position"
+      >
+      <div class="times">
+        <span id="elapsed">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </section>
 
   <script>
     const SONG_INFO_ENDPOINT =
@@ -217,12 +344,15 @@
     const status = document.getElementById("status");
     const title = document.getElementById("title");
     const meta = document.getElementById("meta");
-    const audio = document.getElementById("audio");
-    const heroPlay = document.getElementById("heroPlay");
-    const download = document.getElementById("download");
-    const share = document.getElementById("share");
-    const lyricsSection = document.getElementById("lyricsSection");
     const lyricsText = document.getElementById("lyricsText");
+    const audio = document.getElementById("audio");
+    const playerDock = document.getElementById("playerDock");
+    const heroPlay = document.getElementById("heroPlay");
+    const heroLabel = document.getElementById("heroLabel");
+    const progress = document.getElementById("progress");
+    const elapsed = document.getElementById("elapsed");
+    const duration = document.getElementById("duration");
+    const download = document.getElementById("download");
 
     function getShareCode() {
       const parts = window.location.pathname.split("/").filter(Boolean);
@@ -251,38 +381,95 @@
       return { scripture: "Scripture", version: code || "Unknown version" };
     }
 
-    function setMetaRows(rows) {
+    function setMeta(translation, style) {
+      const display = scriptureDisplayInfo(translation);
       meta.replaceChildren();
-      for (const [label, value] of rows) {
-        const row = document.createElement("div");
-        row.className = "meta-row";
-        row.textContent = `${label}: ${value}`;
-        meta.appendChild(row);
-      }
+
+      const scripture = document.createElement("div");
+      scripture.innerHTML = `<strong>${display.scripture}</strong>`;
+
+      const version = document.createElement("div");
+      version.textContent = display.version;
+
+      const sound = document.createElement("div");
+      sound.textContent = style || "Song";
+
+      meta.append(scripture, version, sound);
     }
 
-    function setLyrics(arrangedLyrics) {
-      const lyrics = String(arrangedLyrics || "").trim();
+    function renderLyrics(arrangedLyrics) {
+      const text = String(arrangedLyrics || "").trim();
+      lyricsText.replaceChildren();
 
-      if (!lyrics) {
-        lyricsText.textContent = "";
-        lyricsSection.hidden = true;
+      if (!text) {
+        const missing = document.createElement("div");
+        missing.className = "lyric-line";
+        missing.textContent = "Lyrics are not available for this song.";
+        lyricsText.appendChild(missing);
         return;
       }
 
-      // textContent intentionally keeps the stored lyric sheet as plain text,
-      // preserving section labels and line breaks without interpreting HTML.
-      lyricsText.textContent = lyrics;
-      lyricsSection.hidden = false;
+      for (const rawLine of text.replace(/\r\n?/g, "\n").split("\n")) {
+        const line = rawLine.trimEnd();
+
+        if (!line.trim()) {
+          const spacer = document.createElement("div");
+          spacer.className = "lyric-spacer";
+          lyricsText.appendChild(spacer);
+          continue;
+        }
+
+        const element = document.createElement("div");
+        if (/^\[[^\]]+\]$/.test(line.trim())) {
+          element.className = "lyric-heading";
+        } else {
+          element.className = "lyric-line";
+        }
+        element.textContent = line;
+        lyricsText.appendChild(element);
+      }
     }
 
-    function updatePlayButton() {
-      if (audio.paused || audio.ended) {
-        heroPlay.textContent = "▶ PRESS HERE TO PLAY YOUR SONG";
-        heroPlay.setAttribute("aria-label", "Play your song");
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+      const whole = Math.floor(seconds);
+      const minutes = Math.floor(whole / 60);
+      const secs = whole % 60;
+      return `${minutes}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function updatePlayState() {
+      const isPlaying = !audio.paused && !audio.ended;
+      heroPlay.textContent = isPlaying ? "❚❚" : "▶";
+      heroLabel.textContent = isPlaying ? "PAUSE" : "PLAY SONG";
+      heroPlay.setAttribute("aria-label", isPlaying ? "Pause your song" : "Play your song");
+    }
+
+    function updateProgress() {
+      const total = Number(audio.duration);
+      const current = Number(audio.currentTime);
+
+      elapsed.textContent = formatTime(current);
+      duration.textContent = formatTime(total);
+
+      if (Number.isFinite(total) && total > 0) {
+        progress.value = String(Math.round((current / total) * 1000));
       } else {
-        heroPlay.textContent = "❚❚ PAUSE";
-        heroPlay.setAttribute("aria-label", "Pause your song");
+        progress.value = "0";
+      }
+    }
+
+    async function togglePlayback() {
+      try {
+        if (audio.paused || audio.ended) {
+          await audio.play();
+        } else {
+          audio.pause();
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        updatePlayState();
       }
     }
 
@@ -290,10 +477,9 @@
       try {
         await audio.play();
       } catch (error) {
-        // Audible autoplay is commonly blocked on mobile. The large button remains the fallback.
         console.info("Autoplay was blocked; waiting for user tap.", error?.name || error);
       } finally {
-        updatePlayButton();
+        updatePlayState();
       }
     }
 
@@ -321,25 +507,25 @@
         const passage = s.passage || "Your Scripture Song";
         const style = s.style || "Song";
         const translation = s.translation || "BSB";
-        const display = scriptureDisplayInfo(translation);
 
         document.title = `${passage} | 844.THY.SONG`;
         title.textContent = passage;
-        setMetaRows([
-          ["Scripture", display.scripture],
-          ["Version", display.version],
-          ["Sound", style],
-        ]);
-        setLyrics(s.arranged_lyrics);
+        setMeta(translation, style);
+        renderLyrics(s.arranged_lyrics);
 
         audio.src = s.play_url;
         audio.load();
+
         download.href = s.download_url;
         download.setAttribute("download", "");
 
         heroPlay.disabled = false;
+        heroLabel.disabled = false;
+        progress.disabled = false;
+
         loading.hidden = true;
         songSection.hidden = false;
+        playerDock.hidden = false;
 
         await attemptAutoplay();
       } catch (error) {
@@ -348,46 +534,24 @@
       }
     }
 
-    heroPlay.addEventListener("click", async () => {
-      try {
-        if (audio.paused || audio.ended) {
-          await audio.play();
-        } else {
-          audio.pause();
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        updatePlayButton();
-      }
+    heroPlay.addEventListener("click", togglePlayback);
+    heroLabel.addEventListener("click", togglePlayback);
+
+    progress.addEventListener("input", () => {
+      const total = Number(audio.duration);
+      if (!Number.isFinite(total) || total <= 0) return;
+      audio.currentTime = (Number(progress.value) / 1000) * total;
+      updateProgress();
     });
 
-    audio.addEventListener("play", updatePlayButton);
-    audio.addEventListener("pause", updatePlayButton);
-    audio.addEventListener("ended", updatePlayButton);
-
-    share.addEventListener("click", async () => {
-      const shareData = {
-        title: document.title,
-        text: `${title.textContent} • 844.THY.SONG`,
-        url: window.location.href,
-      };
-
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData);
-          return;
-        }
-
-        await navigator.clipboard.writeText(window.location.href);
-        const original = share.textContent;
-        share.textContent = "Link Copied";
-        setTimeout(() => { share.textContent = original; }, 1800);
-      } catch (error) {
-        if (error?.name !== "AbortError") {
-          console.error(error);
-        }
-      }
+    audio.addEventListener("loadedmetadata", updateProgress);
+    audio.addEventListener("durationchange", updateProgress);
+    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("play", updatePlayState);
+    audio.addEventListener("pause", updatePlayState);
+    audio.addEventListener("ended", () => {
+      updatePlayState();
+      updateProgress();
     });
 
     loadSong();
