@@ -62,3 +62,7 @@ unique-christian-gifts: PASS
 IMAGE CROPPING FIX
 ==================
 Updated all 20 landing pages so the hero image uses object-fit: contain, centered, with light padding.
+
+HERO IMAGE V3
+=============
+All 20 pages now display the physical-gift image at its natural aspect ratio with no forced crop and no excess white image area.

@@ -25,3 +25,5 @@ After uploading, spot-check:
 GA4 tracking added to all 20 landing pages using Measurement ID: G-P7JTE3D7W7
 
 Image display fix: hero images now use object-fit: contain so the full physical-gift image shows instead of being cropped.
+
+Hero image v3 fix: removed the forced image box. The physical-gift image now displays at its natural 4:3 ratio and fills the card width without cropping or distant whitespace.
