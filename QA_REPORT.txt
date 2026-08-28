@@ -35,3 +35,26 @@ christian-gifts-for-grandparents: PASS | title 60 | meta 131
 christian-gifts-for-music-lovers: PASS | title 60 | meta 125
 christian-wedding-gifts: PASS | title 58 | meta 144
 christian-encouragement-gifts: PASS | title 57 | meta 144
+
+GA4 CHECK
+=========
+baptism-gifts: PASS
+bible-verse-gifts: PASS
+christian-birthday-gifts: PASS
+christian-christmas-gifts: PASS
+christian-encouragement-gifts: PASS
+christian-gift-for-someone-who-has-everything: PASS
+christian-gifts-for-grandparents: PASS
+christian-gifts-for-men: PASS
+christian-gifts-for-music-lovers: PASS
+christian-gifts-for-teens: PASS
+christian-gifts-for-women: PASS
+christian-graduation-gifts: PASS
+christian-wedding-gifts: PASS
+confirmation-gifts: PASS
+first-communion-gifts: PASS
+gift-for-her: PASS
+gift-for-him: PASS
+personalized-christian-gifts: PASS
+scripture-gifts: PASS
+unique-christian-gifts: PASS

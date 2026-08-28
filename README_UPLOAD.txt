@@ -21,3 +21,5 @@ After uploading, spot-check:
 - /gift/ CTA
 - physical-gift image
 - three or four random URLs in an incognito window
+
+GA4 tracking added to all 20 landing pages using Measurement ID: G-P7JTE3D7W7
