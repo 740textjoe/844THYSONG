@@ -1,0 +1,37 @@
+FULL SEO PACKAGE QA
+===================
+20 landing pages: PASS
+Unique title tags: PASS
+Unique meta descriptions: PASS
+Unique H1s: PASS
+Canonical tags: PASS
+Robots index/follow: PASS
+Open Graph metadata: PASS
+Twitter metadata: PASS
+WebPage/Breadcrumb/FAQ schema: PASS
+Gift-page CTAs: PASS
+Recipient-vs-buyer wording: PASS
+Responsive shared THYSONG branding: PASS
+Plain-language/KISS pass: PASS
+No em-dash sentence separators: PASS
+
+christian-gift-for-someone-who-has-everything: PASS | title 55 | meta 149
+gift-for-him: PASS | title 57 | meta 144
+gift-for-her: PASS | title 57 | meta 145
+christian-gifts-for-men: PASS | title 58 | meta 128
+christian-gifts-for-women: PASS | title 60 | meta 132
+christian-graduation-gifts: PASS | title 60 | meta 152
+confirmation-gifts: PASS | title 57 | meta 145
+first-communion-gifts: PASS | title 53 | meta 155
+baptism-gifts: PASS | title 52 | meta 151
+unique-christian-gifts: PASS | title 57 | meta 132
+personalized-christian-gifts: PASS | title 56 | meta 151
+scripture-gifts: PASS | title 58 | meta 126
+bible-verse-gifts: PASS | title 52 | meta 141
+christian-birthday-gifts: PASS | title 59 | meta 144
+christian-christmas-gifts: PASS | title 60 | meta 146
+christian-gifts-for-teens: PASS | title 60 | meta 130
+christian-gifts-for-grandparents: PASS | title 60 | meta 131
+christian-gifts-for-music-lovers: PASS | title 60 | meta 125
+christian-wedding-gifts: PASS | title 58 | meta 144
+christian-encouragement-gifts: PASS | title 57 | meta 144
