@@ -1685,10 +1685,35 @@
       }
     }
 
+
+    /* V8 real product imagery */
+    .product-photo-wrap {
+      height: 320px !important;
+      background: #fffaf2 !important;
+      display: grid !important;
+      place-items: center !important;
+      overflow: hidden !important;
+    }
+
+    .gift-product-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #fffaf2;
+    }
+
+    @media (max-width: 560px) {
+      .product-photo-wrap {
+        height: 275px !important;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+  <!-- 844.THY.SONG Gift Page V8 -->
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="/" aria-label="844 THY SONG home">
@@ -1718,35 +1743,14 @@
             <label class="delivery-card delivery-product physical-product" id="physical-card">
               <input type="radio" name="delivery" value="physical">
 
-              <div class="delivery-visual physical-gift-visual" aria-hidden="true">
-                <div class="what-arrives">What arrives</div>
-
-                <div class="gift-scene">
-                  <div class="gift-mailer">
-                    <div class="mailer-lid"></div>
-                    <div class="gift-crinkle crinkle-1"></div>
-                    <div class="gift-crinkle crinkle-2"></div>
-                    <div class="gift-ribbon ribbon-a"></div>
-                    <div class="gift-ribbon ribbon-b"></div>
-
-                    <div class="gift-insert">
-                      <div class="insert-small">You've been given</div>
-                      <div class="insert-title">Scripture in Song</div>
-                      <div class="insert-code-label">YOUR GIFT CODE</div>
-                      <div class="insert-code">GRACE72</div>
-                    </div>
-
-                    <div class="gift-coaster">
-                      <div class="coaster-note">♫</div>
-                      <div class="coaster-brand">844.<span>THY</span>.SONG</div>
-                      <div class="coaster-tag">Music from His Word</div>
-                    </div>
-                  </div>
+              <div class="delivery-visual product-photo-wrap">
+                <img class="gift-product-photo" src="assets/physical-gift.png" alt="Example of the mailed 844.THY.SONG physical gift package with a coaster and gift code card">
+              </div>
                 </div>
               </div>
 
               <span class="delivery-title product-title"><span class="delivery-icon">🎁</span> Mail a Physical Gift</span>
-              <p class="delivery-lead">We mail a beautifully packaged gift directly to them.</p>
+              <p class="delivery-lead">We mail the physical gift directly to them.</p>
 
               <div class="included-list">
                 <div><span class="included-dot">♫</span> THYSONG coaster</div>
@@ -1761,23 +1765,13 @@
             <label class="delivery-card delivery-product digital-product" id="digital-card">
               <input type="radio" name="delivery" value="digital">
 
-              <div class="delivery-visual digital-gift-visual" aria-hidden="true">
-                <div class="phone-shell">
-                  <div class="phone-notch"></div>
-                  <div class="phone-time">9:41</div>
-                  <div class="sms-bubble">
-                    <div>You've been given the gift of Scripture in song!</div>
-                    <strong>GRACE72</strong>
-                    <small>Redeem at 844.THY.SONG</small>
-                  </div>
-                  <div class="reply-bubble">This is so thoughtful! Thank you! ♥</div>
-                  <div class="phone-home"></div>
-                </div>
+              <div class="delivery-visual product-photo-wrap">
+                <img class="gift-product-photo" src="assets/digital-gift.png" alt="Example of the digital gift code the purchaser receives and shares with the recipient">
               </div>
 
               <span class="delivery-title product-title"><span class="delivery-icon">📱</span> Send a Digital Gift</span>
-              <p class="delivery-lead">Get your gift code immediately.</p>
-              <p class="delivery-detail">Share it yourself by text, email, or card.</p>
+              <p class="delivery-lead">You get the gift code immediately.</p>
+              <p class="delivery-detail">You decide when and how to share it with the recipient...by text, email, or your own card.</p>
               <span class="delivery-price">No shipping. No waiting.</span>
               <span class="delivery-cta">Choose Digital Gift <span aria-hidden="true">›</span></span>
             </label>
@@ -2200,3 +2194,4 @@
 
 </body>
 </html>
+  
