@@ -23,3 +23,5 @@ After uploading, spot-check:
 - three or four random URLs in an incognito window
 
 GA4 tracking added to all 20 landing pages using Measurement ID: G-P7JTE3D7W7
+
+Image display fix: hero images now use object-fit: contain so the full physical-gift image shows instead of being cropped.

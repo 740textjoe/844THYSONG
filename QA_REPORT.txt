@@ -58,3 +58,7 @@ gift-for-him: PASS
 personalized-christian-gifts: PASS
 scripture-gifts: PASS
 unique-christian-gifts: PASS
+
+IMAGE CROPPING FIX
+==================
+Updated all 20 landing pages so the hero image uses object-fit: contain, centered, with light padding.
