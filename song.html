@@ -1,7 +1,16 @@
 <!doctype html>
-<!-- 844.THY.SONG player v0.16.1: v0.16 + CTA line break for mobile screenshot clarity -->
+<!-- 844.THY.SONG player v0.16.2: v0.16.1 + GA4 + gift-page CTA -->
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P7JTE3D7W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P7JTE3D7W7');
+  </script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
@@ -152,6 +161,45 @@
     .download-row {
       margin-top: 16px;
     }
+
+    .gift-share {
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 18px;
+      background: rgba(13, 33, 55, 0.74);
+      text-align: center;
+    }
+
+    .gift-share h2 {
+      margin: 0 0 8px;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+
+    .gift-share p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .gift-link {
+      display: inline-block;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .gift-link:hover {
+      background: var(--cream);
+    }
+
 
     .button {
       appearance: none;
@@ -325,6 +373,15 @@
       <div class="download-row">
         <a class="button" id="download" href="#">Download MP3</a>
       </div>
+
+      <section class="gift-share" aria-labelledby="giftShareTitle">
+        <h2 id="giftShareTitle">Help spread Scripture in song</h2>
+        <p>
+          Know someone who would love this? Give them the chance to create
+          custom Scripture songs of their own.
+        </p>
+        <a class="gift-link" href="/gift/">Give the Gift of Scripture in Song</a>
+      </section>
 
       <p class="footer">
         <span class="legal-brand">844.THY.SONG™</span><br>
