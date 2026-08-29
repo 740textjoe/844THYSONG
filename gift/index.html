@@ -1778,11 +1778,29 @@
       cursor: default;
     }
 
+  
+    /* V1.8 TEMP: digital gift checkout is live for the established Square gift packages */
+    .gift-select-unavailable,
+    .gift-select-unavailable:hover {
+      cursor: default !important;
+      background: #f4ecdf !important;
+      color: var(--navy) !important;
+      border-color: var(--line) !important;
+      opacity: .8;
+    }
+
+    .digital-tier-note {
+      margin: 14px auto 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
   </style>
 </head>
 
 <body>
-  <!-- 844.THY.SONG Gift Page V1.7 TEMP - Physical Gift Coming Soon -->
+  <!-- 844.THY.SONG Gift Page V1.8 TEMP - Physical Coming Soon / Digital Live -->
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="/" aria-label="844 THY SONG home">
@@ -1901,10 +1919,13 @@
               <h3>8 Song Gift</h3>
               <div class="custom-song-count">Recipient creates 8 custom Scripture songs</div>
               <div class="price">$39.99</div>
-              <button class="tier-btn gift-select" type="button" data-songs="8" data-price="39.99" data-label="8 Song Gift">Choose 8 Songs</button>
+              <button class="tier-btn gift-select gift-select-unavailable" type="button" data-songs="8" data-price="39.99" data-label="8 Song Gift" disabled>Coming Soon</button>
             </article>
           </div>
 
+          <p class="digital-tier-note">
+            1, 2, and 4 song digital gifts are available now. The 8 song digital gift is coming soon.
+          </p>
         </div>
 
         <!-- STEP 3: DETAILS / CHECKOUT -->
@@ -1924,7 +1945,7 @@
               <strong>Your backup copy:</strong> Keep the code in case the recipient ever needs it again.
             </div>
             <div class="builder-actions">
-              <a class="primary-btn" id="digital-checkout" href="#">
+              <a class="primary-btn" id="digital-checkout" href="https://square.link/u/iTeU3YX1" rel="noopener">
                 Continue to Secure Checkout
               </a>
               <span class="tiny-status">Secure checkout powered by Square.</span>
@@ -2241,11 +2262,14 @@
         });
       });
 
-      // V3 placeholder: Square links are wired in the next step.
-      digitalCheckout.addEventListener('click', (e) => {
-        if (digitalCheckout.getAttribute('href') === '#') {
-          e.preventDefault();
-          alert('Digital checkout is ready for the Square gift link to be wired.');
+      // V1.8: live Square digital gift checkout.
+      digitalCheckout.addEventListener('click', () => {
+        if (window.gtag && selectedGift) {
+          gtag('event', 'gift_digital_checkout_click', {
+            gift_type: 'digital',
+            songs: Number(selectedGift.songs || 0),
+            displayed_price: Number(selectedGift.price || 0)
+          });
         }
       });
 
