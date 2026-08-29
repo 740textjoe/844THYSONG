@@ -1779,28 +1779,12 @@
     }
 
   
-    /* V1.8 TEMP: digital gift checkout is live for the established Square gift packages */
-    .gift-select-unavailable,
-    .gift-select-unavailable:hover {
-      cursor: default !important;
-      background: #f4ecdf !important;
-      color: var(--navy) !important;
-      border-color: var(--line) !important;
-      opacity: .8;
-    }
-
-    .digital-tier-note {
-      margin: 14px auto 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-    }
 
   </style>
 </head>
 
 <body>
-  <!-- 844.THY.SONG Gift Page V1.8 TEMP - Physical Coming Soon / Digital Live -->
+  <!-- 844.THY.SONG Gift Page V1.9 TEMP - Physical Coming Soon / Digital Chooses Size at Square -->
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="/" aria-label="844 THY SONG home">
@@ -1868,8 +1852,8 @@
                 <div class="recipient-instruction"><span class="included-dot">✓</span><span><strong>For the gift recipient:</strong> Text <strong>redeem</strong> to 844.THY.SONG™ (844-849-7664) to begin.</span></div>
               </div>
 
-              <span class="delivery-price">Starts at $5.99</span>
-              <span class="delivery-cta">Choose Digital Gift <span aria-hidden="true">›</span></span>
+              <span class="delivery-price">Gift sizes from $5.99</span>
+              <span class="delivery-cta">Choose Gift Size at Secure Checkout <span aria-hidden="true">›</span></span>
             </label>
           </div>
         </section>
@@ -1919,13 +1903,10 @@
               <h3>8 Song Gift</h3>
               <div class="custom-song-count">Recipient creates 8 custom Scripture songs</div>
               <div class="price">$39.99</div>
-              <button class="tier-btn gift-select gift-select-unavailable" type="button" data-songs="8" data-price="39.99" data-label="8 Song Gift" disabled>Coming Soon</button>
+              <button class="tier-btn gift-select" type="button" data-songs="8" data-price="39.99" data-label="8 Song Gift">Choose 8 Songs</button>
             </article>
           </div>
 
-          <p class="digital-tier-note">
-            1, 2, and 4 song digital gifts are available now. The 8 song digital gift is coming soon.
-          </p>
         </div>
 
         <!-- STEP 3: DETAILS / CHECKOUT -->
@@ -1939,7 +1920,7 @@
 
           <div class="digital-panel" id="digital-panel" hidden>
             <p class="form-intro">
-              After payment, you will receive the gift code immediately so you can share it whenever you are ready.
+              Choose the number of songs at secure Square checkout. After payment, you will receive the gift code immediately so you can share it whenever you are ready.
             </p>
             <div class="checkout-note">
               <strong>Your backup copy:</strong> Keep the code in case the recipient ever needs it again.
@@ -2027,8 +2008,8 @@
               ✉️
               <span class="step-num">2</span>
             </div>
-            <h3>Choose the Gift Size</h3>
-            <p>Pick how many custom Scripture songs you want the recipient to create.</p>
+            <h3>Choose the Gift Size at Checkout</h3>
+            <p>For a digital gift, choose the number of songs during secure Square checkout.</p>
           </article>
 
           <article class="step">
@@ -2213,13 +2194,29 @@
           physicalCard.classList.toggle('selected', physical);
           digitalCard.classList.toggle('selected', !physical);
 
-          chosenDelivery.textContent = physical
-            ? 'You chose: Mail a Physical Gift'
-            : 'You chose: Send a Digital Gift';
-
-          tierStep.hidden = false;
           resetGiftChoice();
-          tierStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          if (physical) {
+            chosenDelivery.textContent = 'You chose: Mail a Physical Gift';
+            tierStep.hidden = false;
+            tierStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+
+          // V1.9 TEMP:
+          // Digital customers choose the gift size at Square,
+          // so do not make them choose the number of songs twice.
+          tierStep.hidden = true;
+          selectedGift = null;
+
+          summary.textContent = 'Digital Gift • Choose gift size at secure checkout';
+          detailTitle.textContent = 'Your Digital Gift';
+          detailSubtitle.textContent = 'Choose the number of songs during secure Square checkout.';
+          physicalForm.hidden = true;
+          digitalPanel.hidden = false;
+          detailStep.hidden = false;
+
+          detailStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
 
@@ -2262,13 +2259,13 @@
         });
       });
 
-      // V1.8: live Square digital gift checkout.
+      // V1.9: live Square digital gift checkout.
+      // Gift size is selected at Square, not on this page.
       digitalCheckout.addEventListener('click', () => {
-        if (window.gtag && selectedGift) {
+        if (window.gtag) {
           gtag('event', 'gift_digital_checkout_click', {
             gift_type: 'digital',
-            songs: Number(selectedGift.songs || 0),
-            displayed_price: Number(selectedGift.price || 0)
+            gift_size_selected_at: 'square'
           });
         }
       });
