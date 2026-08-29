@@ -1780,11 +1780,23 @@
 
   
 
+  
+    /* V2.0 TEMP: digital gift card goes directly to Square in one click */
+    a.digital-product {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a.digital-product:focus-visible {
+      outline: 3px solid rgba(198,124,0,.35);
+      outline-offset: 3px;
+    }
+
   </style>
 </head>
 
 <body>
-  <!-- 844.THY.SONG Gift Page V1.9 TEMP - Physical Coming Soon / Digital Chooses Size at Square -->
+  <!-- 844.THY.SONG Gift Page V2.0 TEMP - Physical Coming Soon / Digital One-Click to Square -->
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="/" aria-label="844 THY SONG home">
@@ -1835,8 +1847,13 @@
               <span class="delivery-cta physical-coming-soon-cta">Physical Gift Box • Coming Soon</span>
             </label>
 
-            <label class="delivery-card delivery-product digital-product" id="digital-card">
-              <input type="radio" name="delivery" value="digital">
+            <a
+              class="delivery-card delivery-product digital-product"
+              id="digital-card"
+              href="https://square.link/u/iTeU3YX1"
+              rel="noopener"
+              onclick="if(window.gtag){gtag('event','gift_digital_checkout_click',{gift_type:'digital',gift_size_selected_at:'square',entry_point:'digital_card'});}"
+            >
 
               <div class="delivery-visual product-photo-wrap">
                 <img class="gift-product-photo" src="assets/digital-gift.png" alt="Example of the digital gift code the purchaser receives and shares with the recipient">
@@ -1853,8 +1870,8 @@
               </div>
 
               <span class="delivery-price">Gift sizes from $5.99</span>
-              <span class="delivery-cta">Choose Gift Size at Secure Checkout <span aria-hidden="true">›</span></span>
-            </label>
+              <span class="delivery-cta">Continue to Secure Checkout <span aria-hidden="true">›</span></span>
+            </a>
           </div>
         </section>
 
@@ -2192,7 +2209,6 @@
 
           const physical = selectedDelivery === 'physical';
           physicalCard.classList.toggle('selected', physical);
-          digitalCard.classList.toggle('selected', !physical);
 
           resetGiftChoice();
 
@@ -2200,23 +2216,7 @@
             chosenDelivery.textContent = 'You chose: Mail a Physical Gift';
             tierStep.hidden = false;
             tierStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            return;
           }
-
-          // V1.9 TEMP:
-          // Digital customers choose the gift size at Square,
-          // so do not make them choose the number of songs twice.
-          tierStep.hidden = true;
-          selectedGift = null;
-
-          summary.textContent = 'Digital Gift • Choose gift size at secure checkout';
-          detailTitle.textContent = 'Your Digital Gift';
-          detailSubtitle.textContent = 'Choose the number of songs during secure Square checkout.';
-          physicalForm.hidden = true;
-          digitalPanel.hidden = false;
-          detailStep.hidden = false;
-
-          detailStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
 
@@ -2225,7 +2225,6 @@
         selectedDelivery = null;
         selectedGift = null;
         physicalCard.classList.remove('selected');
-        digitalCard.classList.remove('selected');
         tierStep.hidden = true;
         detailStep.hidden = true;
         document.getElementById('choose-a-gift').scrollIntoView({ behavior: 'smooth', block: 'start' });
