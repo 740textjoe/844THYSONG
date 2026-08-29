@@ -1735,11 +1735,54 @@
       }
     }
 
+  
+
+    /* V1.7 TEMP: physical gift launch gate while FAI package is under review */
+    .physical-coming-soon {
+      cursor: default !important;
+      position: relative;
+      opacity: .97;
+    }
+
+    .physical-coming-soon:hover {
+      transform: none !important;
+      border-color: #e8dccb !important;
+      box-shadow: 0 9px 24px rgba(8,45,91,.06) !important;
+    }
+
+    .physical-coming-soon-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 8;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      box-shadow: 0 5px 13px rgba(8,45,91,.14);
+    }
+
+    .physical-coming-soon .delivery-cta,
+    .physical-coming-soon:hover .delivery-cta {
+      background: #f4ecdf !important;
+      color: var(--navy) !important;
+      border: 1px solid var(--line);
+      box-shadow: none !important;
+    }
+
+    .physical-coming-soon-cta {
+      cursor: default;
+    }
+
   </style>
 </head>
 
 <body>
-  <!-- 844.THY.SONG Gift Page V9 -->
+  <!-- 844.THY.SONG Gift Page V1.7 TEMP - Physical Gift Coming Soon -->
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="/" aria-label="844 THY SONG home">
@@ -1766,8 +1809,9 @@
           </div>
 
           <div class="delivery-options delivery-products">
-            <label class="delivery-card delivery-product physical-product" id="physical-card">
-              <input type="radio" name="delivery" value="physical">
+            <label class="delivery-card delivery-product physical-product physical-coming-soon" id="physical-card" aria-disabled="true">
+              <input type="radio" name="delivery" value="physical" disabled>
+              <span class="physical-coming-soon-badge">Coming Soon</span>
 
               <div class="delivery-visual product-photo-wrap">
                 <img class="gift-product-photo" src="assets/physical-gift.png" alt="Example of the mailed 844.THY.SONG physical gift package with a coaster and gift code card">
@@ -1785,8 +1829,8 @@
                 <div class="recipient-instruction"><span class="included-dot">✓</span><span><strong>For the gift recipient:</strong> Text <strong>redeem</strong> to 844.THY.SONG™ (844-849-7664) to begin.</span></div>
               </div>
 
-              <span class="delivery-price">Starts at $11.99</span>
-              <span class="delivery-cta">Choose Physical Gift <span aria-hidden="true">›</span></span>
+              <span class="delivery-price">$24.99 • Shipping included</span>
+              <span class="delivery-cta physical-coming-soon-cta">Physical Gift Box • Coming Soon</span>
             </label>
 
             <label class="delivery-card delivery-product digital-product" id="digital-card">
@@ -1953,8 +1997,8 @@
               🎁
               <span class="step-num">1</span>
             </div>
-            <h3>Choose Physical or Digital</h3>
-            <p>Mail a packaged gift directly to them, or get a digital code to share yourself.</p>
+            <h3>Choose Your Gift</h3>
+            <p>Digital gifts are available now. The mailed Physical Gift Box is coming soon.</p>
           </article>
 
           <article class="step">
@@ -2051,21 +2095,21 @@
           <details>
             <summary>How do I give them the code?</summary>
             <p>
-              With a digital gift, you receive the code immediately and can share it however you choose. With a physical gift, we include the code in the package mailed directly to the recipient.
+              With a digital gift, you receive the code immediately and can share it however you choose. When physical gift ordering opens, we will include the code in the package mailed directly to the recipient.
             </p>
           </details>
 
           <details>
             <summary>Can you mail the gift directly to them?</summary>
             <p>
-              Yes. Choose Physical Gift and enter the recipient's mailing address. Their package will include a 844.THY.SONG™ coaster, your personal message, and their unique gift code.
+              Physical gift mailing is coming soon. Once it opens, you will be able to enter the recipient's mailing address and we will mail the 844.THY.SONG™ coaster, your personal message, and their unique gift code directly to them.
             </p>
           </details>
 
           <details>
             <summary>Do I get the gift code too?</summary>
             <p>
-              Yes. You receive the code after purchase as a backup, even when we are mailing the physical gift directly to the recipient.
+              Yes. Digital gift buyers receive the code after purchase. When physical gift ordering opens, the buyer will also receive the code as a backup while we mail the gift directly to the recipient.
             </p>
           </details>
 
